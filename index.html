@@ -359,8 +359,9 @@
     }
 
     .comingsoon-left h2 {
-      font-size: 3rem;
-      font-weight: 550;
+      font-family: "Bitcount Single", system-ui;
+      font-size: 5rem;
+      font-weight: 300;
       text-transform: lowercase;
       letter-spacing: -0.02em;
       margin: 0;
@@ -371,6 +372,7 @@
     }
 
     .coming-list {
+      font-family: "Space Grotesk", sans-serif;
       list-style: none;
       padding: 0;
     }
@@ -499,6 +501,23 @@
       .power-title {
         font-size: 2.5rem;
       }
+
+      .pocket-section {
+        height: 50vh;
+      }
+
+      .power-section {
+        height: 50vh;
+      }
+
+      .pocket-section h2 {
+        font-size: 2rem;
+      }
+
+      .desktop p {
+        padding: 5%;
+      }
+
       .comingsoon-left h2 {
         font-size: 2rem;
       }
@@ -512,6 +531,46 @@
       .nav-link {
         padding: 6px 12px;
         font-size: 0.65rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+
+      .pocket-section {
+        height: 35vh;
+      }
+
+      .power-section {
+        height: 35vh;
+      }
+
+      .pocket-section h2 {
+        font-size: 1.5rem;
+      }
+
+      .desktop p {
+        font-size: 0.8rem;
+      }
+
+      .power-title {
+        font-size: 1.5rem;
+      }
+
+      .power-description {
+        font-size: 0.8rem;
+        position: relative;
+        top: -30%
+      }
+
+      .power-image {
+        height: auto;
+        padding: 0;
+      }
+
+      .power-image img {
+        position: relative;
+        height: 100%;
+        top: -50%;
       }
     }
   </style>
@@ -565,7 +624,7 @@
           <img src="assets/ESP-12E.png" alt="Powerful Cuby" id="POWER_IMAGE">
         </div>
         <div class="power-description">
-          incredibly small, remarkably powerful —<br>the matrix mini delivers real-time animations and smart alerts, engineered to fit anywhere without compromise.
+          incredibly small, remarkably powerful
         </div>
       </div>
     </div>
