@@ -23,6 +23,18 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
 
+  <!-- icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=arrow_forward_ios" />
+
+  <!-- Favicon (browser tab icon) -->
+  <link rel="icon" type="image/png" href="assets/CRPlogo.png">
+
+  <!-- Apple Touch Icon (for iOS home screen) -->
+  <link rel="apple-touch-icon" href="assets/CRPlogo.png">
+
+  <!-- Optional: theme color for mobile browsers -->
+  <meta name="theme-color" content="#ffffff">
+
   <style>
     /* ---------- RESET & BASE (MONOCHROME, SWISS PRECISION) ---------- */
     * {
@@ -104,12 +116,11 @@
 
     .hero-left-content .made-by {
       font-family: "Space Grotesk", sans-serif;
-      font-size: 1.2rem;
+      font-size: 1rem;
       font-weight: 400;
       letter-spacing: 1px;
       text-transform: uppercase;
       color: #3a3a3a;
-      border-top: 1px solid #000;
       padding-top: 1rem;
       display: inline-block;
     }
@@ -129,16 +140,78 @@
       filter: grayscale(100%) contrast(1.02);
     }
 
-    /* ----- PRODUCT HIGHLIGHT (floating image, no container) ----- */
+    /* --- Product carousel --- */
+    .product-carousel {
+      position: relative;
+      overflow: hidden;              /* clips the sliding track */
+      border-radius: 25px;
+      background-color: #f1f1f1;     /* moved here from .product-highlight */
+    }
+
+    .product-track {
+      display: flex;
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      will-change: transform;
+    }
+
     .product-highlight {
+      flex: 0 0 100%;                /* each slide = full width */
+      min-width: 100%;
       display: flex;
       align-items: center;
       gap: 8%;
       flex-wrap: wrap;
-      background-color: #f1f1f1;
-      border-radius: 25px;
       padding: 5%;
+      background: transparent;       /* carousel holds the background */
+      border-radius: 0;              /* carousel holds the corners */
+      box-sizing: border-box;
+    }
+
+    /* --- Nav buttons (now absolute, outside the track) --- */
+    .btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      background: rgba(255, 255, 255, 0.9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      padding: 0;
+      color: #000;
+      transition: background 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: #000;
+      color: #fff;
+    }
+
+    .btn:disabled {
+      opacity: 0.25;
+      cursor: not-allowed;
+    }
+
+    .btn.back { left: 20px; }
+    .btn.next { right: 20px; }
+
+    /* Each panel is a self-contained row of pocket + power */
+    .features-panel {
+      display: none;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 3px;
+      padding: 3px 0 0;
       width: 100%;
+    }
+
+    .features-panel.active {
+      display: flex;
     }
 
     .highlight-left {
@@ -168,7 +241,7 @@
       display: block;
       max-width: 760px;
       width: 100%;
-      height: auto;
+      height: 40vh;
     }
 
     .hover-img {
@@ -232,13 +305,6 @@
 
     /* ----- Features ----- */
 
-    .features {
-      display: flex;
-      gap: 3px;
-      padding: 3px 0 0;
-      flex-direction: row;
-    }
-
     .pocket-section,
     .power-section {
       flex: 1 1 0;
@@ -255,6 +321,59 @@
       display: flex;
       flex-direction: column;
       max-width: 300px;
+    }
+
+    .shapes {
+      position: relative;
+      width: 140px;
+      height: 140px;
+      flex-shrink: 0;
+      top: 10%;
+    }
+
+    .shape1,
+    .shape2 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 140px;
+      background-color: #000;
+      /* center them permanently — the animation keys will re-add this */
+      transform: translate(-50%, -50%);
+      transform-origin: center center;
+    }
+
+    .shape1 {
+      height: 50px;
+      clip-path: ellipse(70px 25px at 50% 50%);
+      animation: spinLeft 12s linear infinite;
+    }
+
+    .shape2 {
+      height: 80px;
+      clip-path: ellipse(70px 40px at 50% 50%);
+      animation: spinRight 12s linear infinite;
+      background-color: #f1f1f1;
+      mix-blend-mode: difference;
+    }
+
+    .shape2.fixed-shape {
+      position: fixed;
+      top: 40px;
+      left: 40px;
+      z-index: 100;
+    }
+
+    /* shape1: counter-clockwise (left) */
+    @keyframes spinLeft {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to   { transform: translate(-50%, -50%) rotate(-360deg); }
+    }
+
+    /* shape2: clockwise (right) */
+    @keyframes spinRight {
+      from { transform: translate(-50%, -50%) rotate(90deg); }
+      to   { transform: translate(-50%, -50%) rotate(450deg); }
     }
 
     .pocket {
@@ -277,6 +396,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      z-index: 3;
     }
 
     .desktop h2 {
@@ -285,11 +405,33 @@
       font-weight: 320;
       text-transform: uppercase;
       letter-spacing: -0.02em;
-      margin-bottom: 1.5rem;
+    }
+
+    .desktop video {
+      width: 60%;
     }
 
     .desktop p {
       font-family: "Space Grotesk", sans-serif;
+    }
+
+    .pocket.CUBYdisplayPRO {
+      justify-content: space-between;
+      flex-direction: column-reverse;
+    }
+
+    .pocket.CUBYdisplayPRO p {
+      position: relative;
+      bottom: 10%;
+    }
+
+    .pocket p {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1rem;
+      max-width: 480px;
+      margin: 0 auto;
+      color: #3a3a3a;
+      line-height: 1.6;
     }
 
     .pocket h2 {
@@ -299,6 +441,23 @@
       text-transform: uppercase;
       letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
+    }
+
+    .pocket.CUBYdisplayMINI {
+      flex-direction: column;
+    }
+
+    .pocket.CUBYdisplayMINI h2 {
+      position: relative;
+      padding-top: 40%;
+      z-index: 1;
+    }
+
+    .pocket.CUBYdisplayMINI img {
+      width: 200px;
+      height: auto;
+      filter: grayscale(100%);
+       z-index: 2;
     }
 
     /* ----- POWER SECTION (vertical, centered) ----- */
@@ -323,6 +482,11 @@
       margin-bottom: 1.5rem;
     }
 
+    .power-title.CUBYdisplayPRO {
+      position: relative;
+      top: 30%;
+    }
+
     .power-image {
       margin: 2rem 0;
       max-width: 320px;
@@ -343,6 +507,47 @@
       margin: 0 auto;
       color: #3a3a3a;
       line-height: 1.6;
+    }
+
+    .power-title.CUBYdisplayMINI {
+      position: relative;
+      top: 18vh;
+    }
+
+    .battery {
+      flex: 1 1 100%;
+      background-image: linear-gradient(to right, #f1f1f1, white, white);   
+      border-radius: 25px;
+      padding: 5%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      box-sizing: border-box;
+      min-height: 200px;
+      border: solid 10px #f1f1f1;
+    }
+
+    .battery-text h2 {
+      font-family: "Bitcount Single", system-ui;
+      font-size: 3rem;
+      font-weight: 320;
+      letter-spacing: -0.02em;
+      margin-bottom: 0.5rem;
+    }
+
+    .battery-text p {
+      font-family: "Space Grotesk", sans-serif;
+      color: #3a3a3a;
+      line-height: 1.6;
+    }
+
+    .bateery-img video {
+      max-width: 200px;
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: rotate(-90deg);
     }
 
     /* ----- COMING SOON (split) ----- */
@@ -401,43 +606,54 @@
     }
 
     /* bottom navbar (fixed, same style as reference site) */
-    .bottom-nav {
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 255, 255, 0.98);
-      backdrop-filter: none;
-      border-radius: 40px;
-      padding: 8px 20px;
-      z-index: 1000;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      border: 1px solid #e5e7eb;
-      display: flex;
-      gap: 24px;
-      min-width: 280px;
-      justify-content: center;
-    }
+        .bottom-nav {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            min-width: 260px;
+            transform: translateX(-50%);
+            background: rgb(255, 255, 255);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 6px 18px;
+            z-index: 9999;
+            border: 1px solid rgba(0, 0, 0, 0.074);
+            display: flex;
+            gap: 8px;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
 
-    .nav-link {
-      background: transparent;
-      border: none;
-      padding: 10px 16px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: #111827;
-      text-decoration: none;
-      transition: all 0.2s;
-      border-radius: 32px;
-      cursor: pointer;
-    }
+        .bottom-nav img {
+            width: 40px;
+        }
 
-    .nav-link:hover {
-      background: #f3f4f6;
-      transform: translateY(-2px);
-    }
+        .nav-link {
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.9px;
+            color: var(--text);
+            text-decoration: none;
+            transition: all 0.22s var(--transition-smooth);
+            border-radius: 32px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+            white-space: nowrap;
+        }
+
+        .nav-link:hover {
+            color: #000000a1;
+        }
+
+        .nav-link.privacy:hover {
+            color: #000000a1;
+        }
 
     /* responsive */
     @media (max-width: 1024px) {
@@ -486,6 +702,23 @@
       .highlight-left {
         min-height: auto;
       }
+
+      .bottom-nav {
+        gap: 4px;
+        padding: 4px 10px;
+        width: auto;
+        max-width: 100%;
+        height: 7%;
+      }
+      
+      .nav-link {
+        padding: 7px 10px;
+        font-size: 0.6rem;
+      }
+
+      .btn { width: 40px; height: 40px; }
+      .btn.back { left: 10px; }
+      .btn.next { right: 10px; }
     }
 
     @media (max-width: 640px) {
@@ -524,13 +757,40 @@
       .coming-list li {
         font-size: 1.1rem;
       }
+
       .bottom-nav {
-        gap: 8px;
-        padding: 6px 12px;
+        bottom: 10px;
+        border-radius: 30px;
+        padding: 4px 6px;
+        gap: 2px;
       }
       .nav-link {
-        padding: 6px 12px;
-        font-size: 0.65rem;
+        padding: 6px 8px;
+        font-size: 0.55rem;
+        letter-spacing: 0.5px;
+      }
+
+      .btn { width: 34px; height: 34px; }
+      .btn.back { left: 6px; }
+      .btn.next { right: 6px; }
+      .btn .material-symbols-outlined { font-size: 18px; }
+
+      .power-image {
+        position: relative;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .power-image img {
+        height: 20vh;
+        width: auto;
+      }
+
+      .power-title {
+        padding-bottom: 0;
+        margin-bottom: 0;
       }
     }
 
@@ -552,25 +812,84 @@
         font-size: 0.8rem;
       }
 
-      .power-title {
-        font-size: 1.5rem;
-      }
-
       .power-description {
         font-size: 0.8rem;
         position: relative;
+        margin-top: 40%;
         top: -30%
       }
 
       .power-image {
-        height: auto;
-        padding: 0;
+        position: relative;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
       }
 
       .power-image img {
-        position: relative;
-        height: 100%;
-        top: -50%;
+        height: 12vh;
+        width: auto;
+      }
+
+      .power-title {
+        padding-bottom: 0;
+        margin-bottom: 0;
+        font-size: 1.5rem;
+      }
+
+      .power-title.CUBYdisplayPRO {
+        top: 10%;
+      }
+
+      .pocket.pocket.CUBYdisplayPRO p {
+        padding: 5%;
+        font-size: 0.8rem;
+      }
+
+      .shape1,
+      .shape2 {
+        position: absolute;
+        top: 60%;
+        left: 50%;
+        width: 50px;
+        background-color: #000;
+        /* center them permanently — the animation keys will re-add this */
+        transform: translate(-50%, -50%);
+        transform-origin: center center;
+      }
+
+      .shape1 {
+        height: 12.5px;
+        clip-path: ellipse(25px 6.25px at 50% 50%);
+        animation: spinLeft 12s linear infinite;
+      }
+
+      .shape2 {
+        height: 20px;
+        clip-path: ellipse(25px 10px at 50% 50%);
+        animation: spinRight 12s linear infinite;
+        background-color: #f1f1f1;
+        mix-blend-mode: difference;
+      }
+
+      .desktop.CUBYdisplayPRO h2 {
+        font-size: 1.3rem;
+      }
+
+      .desktop {
+        z-index: 3;
+      }
+
+      .pocket.CUBYdisplayMINI img {
+        width: 100px;
+        height: auto;
+        z-index: 2;
+      }
+
+      .pocket.CUBYdisplayMINI h2 {
+        top: 28%;
+        z-index: 1;
       }
     }
   </style>
@@ -583,50 +902,139 @@
     <div class="hero-left">
       <div class="hero-left-content fade-section">
         <h1>CUBY collection</h1>
-        <div class="made-by">made by CRP</div>
+        <div class="made-by">Designed and developed by CRP</div>
       </div>
     </div>
   </div>
 
-  <!-- 2. PRODUCT HIGHLIGHT SECTION with BUY NOW button below text -->
+  <!-- 2. PRODUCT CAROUSEL -->
   <div class="container">
     <section class="fade-section product-section">
-      <div class="product-highlight">
-        <div class="highlight-left">
-          <div class="hover-image-container">
-            <img class="default-img floating-image" src="https://i.postimg.cc/Pf2scqp9/Adobe-Express-file.png" alt="Cuby Matrix Mini" id="MATRIX_MINI_IDLE">
-            <img class="hover-img floating-image" src="https://i.postimg.cc/3rn56w4b/Adobe-Express-file-(1).png" alt="Cuby Matrix Mini active" id="MATRIX_MINI_ACTIVE">
+      <div class="product-carousel">
+        <div class="product-track" id="productTrack">
+
+          <!-- Slide 1: matrix MINI -->
+          <div class="product-highlight">
+            <div class="highlight-left">
+              <div class="hover-image-container">
+                <img class="default-img floating-image" src="https://i.postimg.cc/Pf2scqp9/Adobe-Express-file.png" alt="Cuby Matrix Mini">
+                <img class="hover-img floating-image" src="https://i.postimg.cc/3rn56w4b/Adobe-Express-file-(1).png" alt="Cuby Matrix Mini active">
+              </div>
+            </div>
+            <div class="highlight-right">
+              <div class="product-name">CUBY matrix MINI</div>
+              <a href="https://scxtax-ra.myshopify.com/products/cuby-matrix-mini" target="_blank" class="product-buy-btn">BUY NOW</a>
+            </div>
           </div>
+
+          <!-- Slide 2: display PRO -->
+          <div class="product-highlight">
+            <div class="highlight-left">
+              <div class="hover-image-container">
+                <img class="default-img floating-image" src="assets/coming-soon.png" alt="Cuby Display Pro">
+                <img class="hover-img floating-image" src="assets/coming-soon.png" alt="Cuby Display Pro active">
+              </div>
+            </div>
+            <div class="highlight-right">
+              <div class="product-name">CUBY display PRO</div>
+              <a href="#" class="product-buy-btn">COMING SOON</a>
+            </div>
+          </div>
+
+          <!-- Slide 3: display MINI -->
+          <div class="product-highlight">
+            <div class="highlight-left">
+              <div class="hover-image-container">
+                <img class="default-img floating-image" src="assets/coming-soon.png" alt="Cuby Display Mini">
+                <img class="hover-img floating-image" src="assets/coming-soon.png" alt="Cuby Display Mini active">
+              </div>
+            </div>
+            <div class="highlight-right">
+              <div class="product-name">CUBY display MINI</div>
+              <a href="#" class="product-buy-btn">COMING SOON</a>
+            </div>
+          </div>
+
         </div>
-        <div class="highlight-right">
-          <div class="product-name">CUBY matrix MINI</div>
-          <a href="https://scxtax-ra.myshopify.com/products/cuby-matrix-mini" target="_blank" class="product-buy-btn">BUY NOW</a>
-        </div>
+
+        <button class="btn back" id="prevBtn" aria-label="Previous device">
+          <span class="material-symbols-outlined" style="transform: rotate(-180deg);">arrow_forward_ios</span>
+        </button>
+        <button class="btn next" id="nextBtn" aria-label="Next device">
+          <span class="material-symbols-outlined">arrow_forward_ios</span>
+        </button>
       </div>
     </section>
   </div>
 
-  <!-- 3. features SECTION -->
+  <!-- 3. FEATURES (three stacked panels, only one shown) -->
   <div class="container">
     <div class="features">
-      <div class="pocket-section">
-        <div class="pocket">
-          <h2>fit in your pocket</h2>
+
+      <div class="features-panel active" data-panel="0">
+        <div class="pocket-section">
+          <div class="pocket CUBYmatrixMINI"><h2>fit in your pocket</h2></div>
+          <div class="desktop">
+            <p>No batteries, just plug in</p>
+            <video src="assets/CUBYmatrixMINI.webm" autoplay muted loop playsinline></video>
+          </div>
         </div>
-        <div class="desktop">
-          <h2>desktop edition</h2>
-          <p>No batteries, just plug in</p>
-        </div>
-      </div>
-      <div class="power-section">
-        <div class="power-title">power.</div>
-        <div class="power-image">
-          <img src="assets/ESP-12E.png" alt="Powerful Cuby" id="POWER_IMAGE">
-        </div>
-        <div class="power-description">
-          incredibly small, remarkably powerful
+        <div class="power-section">
+          <div class="power-title">power.</div>
+          <div class="power-image"><img src="assets/ESP-12E.png" alt="Powerful Cuby"></div>
+          <div class="power-description">incredibly small, remarkably powerful</div>
         </div>
       </div>
+
+      <div class="features-panel" data-panel="1">
+        <div class="pocket-section">
+          <div class="pocket CUBYdisplayPRO">
+            <p>More infomation on screen</p>
+            <div class="shapes">
+              <div class="shape1"></div>
+              <div class="shape2"></div>
+            </div>
+          </div>
+          <div class="desktop CUBYdisplayPRO">
+            <h2>PRO edition</h2>
+            <p>Designed specifically for outdoor activities</p>
+          </div>
+        </div>
+        <div class="power-section">
+          <div class="power-title CUBYdisplayPRO">clarity.</div>
+          <div class="power-image CUBYdisplayPRO"><img src="assets/CUBYdisplayPRO-clarity.png"></div>
+          <div class="power-description CUBYdisplayPRO">a larger screen for richer info at a glance</div>
+        </div>
+        <div class="battery">
+          <div class="battery-text">
+            <h2>5h+</h2>
+            <p>with full brightness screen</p>
+            <p>500mAh battery</p>
+          </div>
+          <div class="bateery-img">
+            <video src="assets/CUBYdisplayPRO-battery.mp4" autoplay muted loop playsinline></video>
+          </div>
+        </div>
+      </div>
+
+      <div class="features-panel" data-panel="2">
+        <div class="pocket-section">
+          <div class="pocket CUBYdisplayMINI">
+            <h2>one-time setup</h2>
+            <img src="assets/CUBYdisplayMINI-oneTimeSetup.png">
+          </div>
+          <div class="desktop">
+            <h2>MINI edition</h2>
+            <p>No batteries, just plug in</p>
+          </div>
+        </div>
+        <div class="power-section">
+          <div class="power-title CUBYdisplayMINI">compact.</div>
+          <div class="power-image CUBYdisplayMINI"><img src="assets/CUBYdisplayMINI-compact.png" alt="Powerful Cuby"></div>
+          <div class="power-description CUBYdisplayMINI">the essentials, beautifully condensed</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -657,10 +1065,12 @@
 </main>
 
 <!-- FIXED BOTTOM NAVBAR (HOME, ABOUT) -->
-<div class="bottom-nav">
-  <button class="nav-link" id="navHome">HOME</button>
-  <button class="nav-link" id="navAbout">ABOUT</button>
-</div>
+  <div class="bottom-nav" role="navigation" aria-label="Main navigation">
+    <button class="nav-link" id="navHome" aria-label="Go to home section">HOME</button>
+    <a href="https://crp-company.github.io/CRP-focus/" target="_blank" rel="noopener" class="nav-link" id="navAbout" aria-label="About CRP Focus on official site">CRP focus</a>
+    <a href="https://crp-company.github.io/CRP-Privacy-policy/" target="_blank" rel="noopener" class="nav-link privacy" id="navPrivacy" aria-label="Privacy Policy">PRIVACY POLICY</a>
+    <img src="https://i.postimg.cc/K8zf4q4q/CRPlogo.png" alt="CRP logo" id="LOGO_1_URL" loading="lazy">
+  </div>
 
 <script>
   (function() {
@@ -709,6 +1119,71 @@
         hoverContainer.style.transform = 'scale(1)';
       });
     }
+
+    // ----- PRODUCT CAROUSEL -----
+    const track   = document.getElementById('productTrack');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const panels  = document.querySelectorAll('.features-panel');
+
+    if (track) {
+      const slides = track.querySelectorAll('.product-highlight');
+      let current = 0;
+
+      function update() {
+        track.style.transform = `translateX(-${current * 100}%)`;
+        panels.forEach((p, i) => p.classList.toggle('active', i === current));
+        if (prevBtn) prevBtn.disabled = current === 0;
+        if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', () => {
+        if (current > 0) { current--; update(); }
+      });
+
+      if (nextBtn) nextBtn.addEventListener('click', () => {
+        if (current < slides.length - 1) { current++; update(); }
+      });
+
+      if (typeof recalcShape2Top === 'function') recalcShape2Top();
+
+      update();   // set initial state
+    }
+
+    // ----- FIXED SHAPE2 (mirrors the #name effect) -----
+    const shape2 = document.querySelector('.shape2');
+    const panel1 = document.querySelector('.features-panel[data-panel="1"]');
+    let shape2InitialTop = 0;
+
+    function recalcShape2Top() {
+      if (!shape2 || !panel1) return;
+      const wasFixed = shape2.classList.contains('fixed-shape');
+      if (wasFixed) shape2.classList.remove('fixed-shape');
+
+      // Only meaningful if panel 1 is currently visible
+      if (panel1.classList.contains('active')) {
+        shape2InitialTop = shape2.getBoundingClientRect().top + window.scrollY;
+      }
+
+      if (wasFixed) shape2.classList.add('fixed-shape');
+    }
+
+    window.addEventListener('resize', recalcShape2Top);
+    window.addEventListener('load', recalcShape2Top);
+
+    window.addEventListener('scroll', () => {
+      if (!shape2 || !panel1) return;
+      if (!panel1.classList.contains('active')) {
+        shape2.classList.remove('fixed-shape');
+        return;
+      }
+
+      if (window.scrollY >= shape2InitialTop - 10) {
+        shape2.classList.add('fixed-shape');
+      } else {
+        shape2.classList.remove('fixed-shape');
+      }
+    });
   })();
 </script>
 </body>
