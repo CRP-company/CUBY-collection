@@ -3,7 +3,26 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>CRP — CUBY collection</title>
+  <title>CRP - CUBY collection</title>
+  <meta name="description" content="CUBY are small and lightweight devices that connect to CRP focus app, imports and shows only what truly matters, so you dont even need your phone">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="CRP">
+  <meta name="keywords" content="CRP Focus, CRP Focus app, notification management, notification filter, focus app, CRP, cuby, cuby matrix mini, CUBY, CUBY matrix mini, cuby">
+  <meta property="og:title" content="CUBY collection">
+  <meta property="og:description" content="intelligent, small, shows what really matters.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://crp-company.github.io/CUBY-collection/">
+
+  <meta property="og:image" content="https://crp-company.github.io/CRP-focus/assets/og-preview.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="CUBY collection">
+
+  <!-- fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bitcount+Single:wght@100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+
   <style>
     /* ---------- RESET & BASE (MONOCHROME, SWISS PRECISION) ---------- */
     * {
@@ -18,21 +37,10 @@
     }
 
     body {
-      font-family: 'Inter', 'Helvetica Neue', 'SF Pro Text', system-ui, sans-serif;
       background: #ffffff;
       color: #000000;
-      line-height: 1.4;
-      font-weight: 400;
-      letter-spacing: -0.01em;
       overflow-x: hidden;
       padding-bottom: 90px;
-    }
-
-    /* pixel-inspired modern typography for headings */
-    h1, h2, h3, .hero-left, .section-title, .product-name, .comingsoon-left, .power-title {
-      font-family: 'Space Grotesk', 'Inter', 'SF Mono', monospace;
-      font-weight: 500;
-      letter-spacing: -0.02em;
     }
 
     /* subtle global grid overlay (thin lines) – only on body background */
@@ -70,7 +78,7 @@
     /* ----- HERO SPLIT SCREEN (no cards) ----- */
     .hero-split {
       display: flex;
-      min-height: 100vh;
+      height: 100vh;
       width: 100%;
       position: relative;
     }
@@ -85,8 +93,9 @@
     }
 
     .hero-left-content h1 {
+      font-family: "Bitcount Single", system-ui;
       font-size: 5.5rem;
-      font-weight: 600;
+      font-weight: 400;
       line-height: 1.05;
       letter-spacing: -0.03em;
       text-transform: uppercase;
@@ -94,6 +103,7 @@
     }
 
     .hero-left-content .made-by {
+      font-family: "Space Grotesk", sans-serif;
       font-size: 1.2rem;
       font-weight: 400;
       letter-spacing: 1px;
@@ -125,6 +135,10 @@
       align-items: center;
       gap: 8%;
       flex-wrap: wrap;
+      background-color: #f1f1f1;
+      border-radius: 25px;
+      padding: 5%;
+      width: 100%;
     }
 
     .highlight-left {
@@ -178,20 +192,11 @@
     }
 
     .product-name {
+      font-family: "Bitcount Single", system-ui;
       font-size: 3rem;
-      font-weight: 600;
+      font-weight: 300;
       letter-spacing: -0.02em;
       margin-bottom: 0.75rem;
-    }
-
-    .popular-badge {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: #4a4a4a;
-      border-left: 2px solid #000;
-      padding-left: 12px;
-      margin-bottom: 2rem;
     }
 
     /* Buy button styling (matching original but adapted for light background) */
@@ -221,27 +226,79 @@
       transform: translateY(-2px);
     }
 
+    .product-section {
+      padding-bottom: 0;   /* was 120px (or 80px on mobile) */
+    }
+
+    /* ----- Features ----- */
+
+    .features {
+      display: flex;
+      gap: 3px;
+      padding: 3px 0 0;
+      flex-direction: row;
+    }
+
+    .pocket-section,
+    .power-section {
+      flex: 1 1 0;
+      min-width: 0;
+      margin: 0;
+    }
+
     /* ----- POCKET SECTION (text only, centered) ----- */
     .pocket-section {
       text-align: center;
-      max-width: 720px;
-      margin: 0 auto;
+      margin-right: 3px;
+      height: 80vh;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      max-width: 300px;
     }
 
-    .pocket-title {
+    .pocket {
+      background-color: #f1f1f1;
+      width: 100%;
+      height: 50%;
+      border-radius: 25px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 3px;
+    }
+
+    .desktop {
+      background-color: #f1f1f1;
+      width: 100%;
+      height: 50%;
+      border-radius: 25px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .desktop h2 {
+      font-family: "Bitcount Single", system-ui;
       font-size: 3rem;
-      font-weight: 550;
-      text-transform: lowercase;
+      font-weight: 320;
+      text-transform: uppercase;
       letter-spacing: -0.02em;
       margin-bottom: 1.5rem;
     }
 
-    .pocket-text {
-      font-size: 1.2rem;
-      line-height: 1.6;
-      color: #2c2c2c;
-      max-width: 580px;
-      margin: 0 auto;
+    .desktop p {
+      font-family: "Space Grotesk", sans-serif;
+    }
+
+    .pocket h2 {
+      font-family: "Bitcount Single", system-ui;
+      font-size: 3rem;
+      font-weight: 320;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.5rem;
     }
 
     /* ----- POWER SECTION (vertical, centered) ----- */
@@ -250,14 +307,20 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+      background-color: #f1f1f1;
+      height: 80vh;
+      margin-left: 0px;
+      padding: 5%;
+      border-radius: 25px;
     }
 
     .power-title {
-      font-size: 4rem;
-      font-weight: 600;
+      font-family: "Bitcount Single", system-ui;
+      font-size: 3rem;
+      font-weight: 320;
+      text-transform: uppercase;
       letter-spacing: -0.02em;
-      text-transform: lowercase;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .power-image {
@@ -267,13 +330,14 @@
     }
 
     .power-image img {
-      width: 100%;
+      width: 90%;
       height: auto;
       filter: grayscale(100%);
       display: block;
     }
 
     .power-description {
+      font-family: "Space Grotesk", sans-serif;
       font-size: 1rem;
       max-width: 480px;
       margin: 0 auto;
@@ -451,8 +515,6 @@
       }
     }
   </style>
-  <!-- Google Fonts: geometric sans + space grotesk -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
@@ -465,14 +527,11 @@
         <div class="made-by">made by CRP</div>
       </div>
     </div>
-    <div class="hero-right">
-      <img src="https://i.postimg.cc/CMs0CNsF/CUBYcollection.png" alt="Cuby hero visual" id="HERO_RIGHT_IMAGE">
-    </div>
   </div>
 
   <!-- 2. PRODUCT HIGHLIGHT SECTION with BUY NOW button below text -->
   <div class="container">
-    <section class="fade-section">
+    <section class="fade-section product-section">
       <div class="product-highlight">
         <div class="highlight-left">
           <div class="hover-image-container">
@@ -482,36 +541,34 @@
         </div>
         <div class="highlight-right">
           <div class="product-name">CUBY matrix MINI</div>
-          <div class="popular-badge">most popular</div>
           <a href="https://scxtax-ra.myshopify.com/products/cuby-matrix-mini" target="_blank" class="product-buy-btn">BUY NOW</a>
         </div>
       </div>
     </section>
   </div>
 
-  <!-- 3. POCKET SECTION -->
+  <!-- 3. features SECTION -->
   <div class="container">
-    <section class="fade-section">
+    <div class="features">
       <div class="pocket-section">
-        <div class="pocket-title">fit in your pocket</div>
-        <div class="pocket-text">the cuby matrix mini is very tiny and lightweight</div>
+        <div class="pocket">
+          <h2>fit in your pocket</h2>
+        </div>
+        <div class="desktop">
+          <h2>desktop edition</h2>
+          <p>No batteries, just plug in</p>
+        </div>
       </div>
-    </section>
-  </div>
-
-  <!-- 4. POWER SECTION -->
-  <div class="container">
-    <section class="fade-section">
       <div class="power-section">
         <div class="power-title">power.</div>
         <div class="power-image">
-          <img src="https://i5.walmartimages.com/seo/ESP-12E-ESP8266-WiFi-Module_b990ca52-93dc-4c8a-b201-69a54c871cdb.775d905855b66c754bef84975c41ad5f.jpeg?odnHeight=573&odnWidth=573" alt="Powerful Cuby" id="POWER_IMAGE">
+          <img src="assets/ESP-12E.png" alt="Powerful Cuby" id="POWER_IMAGE">
         </div>
         <div class="power-description">
           incredibly small, remarkably powerful —<br>the matrix mini delivers real-time animations and smart alerts, engineered to fit anywhere without compromise.
         </div>
       </div>
-    </section>
+    </div>
   </div>
 
   <!-- 5. COMING SOON SECTION -->
